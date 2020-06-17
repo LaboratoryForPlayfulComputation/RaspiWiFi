@@ -20,12 +20,12 @@ if os.getuid():
     sys.exit('You need root access to install!')
 
 
-entered_ssid = "PI-HOT-SPOT"
+entered_ssid = ""
 wpa_enabled_choice = "N"
 wpa_entered_key = ""
 auto_config_choice = "y"
-auto_config_delay = 90
-server_port_choice = 80
+auto_config_delay = "90"
+server_port_choice = "80"
 ssl_enabled_choice = "N"
 install_ans = "y"
 
