@@ -12,7 +12,7 @@ $ scp /path/to/RaspiWiFi/on/your/computer pi@192.168.0.xxx:~/RaspiWiFi
 
 Next, install any libraries that you may be missing for RaspiWiFi and make sure that rfkill is unblocked on your pi:
 $ cd RaspiWiFi
-$ sudo ./requirements.sh
+$ sudo ./system_setup.sh
 
 Then, run the initial setup (feel free to edit the settings in this file if you want a different setup, such as a longer time period before reboot w/o wifi connection):
 !WARNING: THIS ONLY WORKS ON INITIAL SETUP, NOT SUBSEQUENT SETUP!
@@ -63,7 +63,11 @@ pi         687  0.0  0.0   7348   508 pts/0    S+   18:54   0:00 grep --color=au
 
 3. To see the logs from the connection monitor logs, which are be default written to your home directory (`/home/pi/wificonnectionmonitor.log`):
 
-pi@raspberrypi:~ $
+pi@raspberrypi:~ $ cat wificonnectionmonitor.log
+
+or, to see just the last 20 lines:
+
+pi@raspberrypi:~ $ tail -n 20 wificonnectionmonitor.log
 
 This is what it will look like if the pi has a connection and nothing is wonky (1 line logged every 5 minutes):
 
