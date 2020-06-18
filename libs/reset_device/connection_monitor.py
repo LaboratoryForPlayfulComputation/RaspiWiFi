@@ -8,7 +8,7 @@ no_conn_counter = 0
 consecutive_active_reports = 0
 config_hash = reset_lib.config_file_hash()
 home = os.getenv("HOME")
-logging.basicConfig(filename=home + 'wificonnectionmonitor.log',level=logging.DEBUG)
+logging.basicConfig(filename=os.path.join(home, '/wificonnectionmonitor.log'),level=logging.DEBUG)
 logging.info("auto config delay: " + config_hash['auto_config_delay'])
 
 # If auto_config is set to 0 in /etc/raspiwifi/raspiwifi.conf exit this script
@@ -16,6 +16,7 @@ if config_hash['auto_config'] == "0":
     sys.exit()
 else:
     # Main connection monitoring loop at 10 second interval
+    was_inactive = False
     while True:
         time.sleep(10)
 
@@ -27,6 +28,7 @@ else:
             logging.warning("wifi is not active!")
             logging.warning("consecutive active reports: " + str(consecutive_active_reports))
             logging.warning("no connection counter: " + str(no_conn_counter))
+            was_inactive = True
 
         # If iwconfig report association with an AP add 1 to the
         # consecutive_active_reports counter and 10 to the no_conn_counter
@@ -39,7 +41,9 @@ else:
             if consecutive_active_reports >= 2:
                 no_conn_counter = 0
                 consecutive_active_reports = 0
-                logging.info("wifi is active again, resetting connection counters!")
+                if was_inactive:
+                    logging.info("wifi is active again, resetting connection counters!")
+                was_inactive = False
 
 
 
