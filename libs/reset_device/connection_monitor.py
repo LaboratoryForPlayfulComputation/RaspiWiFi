@@ -7,8 +7,9 @@ import reset_lib
 no_conn_counter = 0
 consecutive_active_reports = 0
 config_hash = reset_lib.config_file_hash()
-logging.basicConfig(filename='connectionmonitor.log',level=logging.DEBUG)
-logging.info("auto config delay: " + config_hash['auto_config_delay'] + "\n")
+home = os.getenv("HOME")
+logging.basicConfig(filename=home + 'wificonnectionmonitor.log',level=logging.DEBUG)
+logging.info("auto config delay: " + config_hash['auto_config_delay'])
 
 # If auto_config is set to 0 in /etc/raspiwifi/raspiwifi.conf exit this script
 if config_hash['auto_config'] == "0":
@@ -18,13 +19,14 @@ else:
     while True:
         time.sleep(10)
 
-
         # If iwconfig report no association with an AP add 10 to the "No
         # Connection Couter"
         if not reset_lib.is_wifi_active():
             no_conn_counter += 10
             consecutive_active_reports = 0
-            logging.warning("wifi is not active!\n")
+            logging.warning("wifi is not active!")
+            logging.warning("consecutive active reports: " + str(consecutive_active_reports))
+            logging.warning("no connection counter: " + str(no_conn_counter))
 
         # If iwconfig report association with an AP add 1 to the
         # consecutive_active_reports counter and 10 to the no_conn_counter
@@ -37,13 +39,13 @@ else:
             if consecutive_active_reports >= 2:
                 no_conn_counter = 0
                 consecutive_active_reports = 0
+                logging.info("wifi is active again, resetting connection counters!")
 
-        logging.info("consecutive active reports: " + str(consecutive_active_reports) + "\n")
-        logging.info("no connection counter: " + str(no_conn_counter) + "\n")
+
 
         # If the number of seconds not associated with an AP is greater or
         # equal to the auto_config_delay specified in the /etc/raspiwifi/raspiwifi.conf
         # trigger a reset into AP Host (Configuration) mode.
         if no_conn_counter >= int(config_hash['auto_config_delay']):
-            logging.warning("resetting!\n")
+            logging.warning("resetting and restarting pi in hot spot mode!\n")
             reset_lib.reset_to_host_mode()
