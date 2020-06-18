@@ -1,5 +1,7 @@
 Installation and usage (for updated fork):
 
+Tested on Raspberry pi 3 Model B+, 2017
+
 1. If you have a pi w/ an OS installed already and either an ethernet connection or pre-configured wifi:
 
 Either install git and clone this repo on your pi:
@@ -7,7 +9,7 @@ $ sudo apt-get install git
 $ git clone https://github.com/LaboratoryForPlayfulComputation/RaspiWiFi.git
 
 or perform a file transfer from your computer with the repo:
-(WARNING: UNTESTED, you may want to transfer a zip file instead as there is an ssh file that scp doesn't understand well)
+(WARNING: UNTESTED, you may want to transfer a zip file instead of recursively transferring the folder as there is an ssh file that scp doesn't understand well)
 $ scp /path/to/RaspiWiFi/on/your/computer pi@192.168.0.xxx:~/RaspiWiFi
 
 Next, install any libraries that you may be missing for RaspiWiFi and make sure that rfkill is unblocked on your pi:
@@ -18,9 +20,11 @@ Then, run the initial setup (feel free to edit the settings in this file if you 
 !WARNING: THIS ONLY WORKS ON INITIAL SETUP, NOT SUBSEQUENT SETUP!
 # sudo python3 initial_setup_hardboiled.py
 
+If you need to reset/return to hotspot mode without moving to a new network or turning off your current network, run the following from the RaspiWiFi directory:
+$ sudo python3 libs/reset_device/manual_reset.py
+
 Your pi will now reboot itself and will be broadcasting a hotspot at the following locations (this reboot process took me ~1 minute):
-- [10.0.0.1], [raspiwifisetup.com], or
-[idliketoconfigurethewifionthisdevicenowplease.com]
+- http://10.0.0.1, http://raspiwifisetup.com, or http://idliketoconfigurethewifionthisdevicenowplease.com
 
 Join the hotspot that is being broadcast on a computer, phone, tablet, etc (called "RaspiWiFi Setup xxx"), then navigate to one of these websites. Enter the credentials of the network that you'd like to join, then press "connect".
 
@@ -53,7 +57,7 @@ wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
 
-Note the differences in inet!
+Note the differences in inet addresses!
 
 2. To see if the connection monitor is running in the background:
 pi@raspberrypi:~ $ ps aux | grep "python"

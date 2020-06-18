@@ -7,8 +7,13 @@ import reset_lib
 no_conn_counter = 0
 consecutive_active_reports = 0
 config_hash = reset_lib.config_file_hash()
-home = os.getenv("HOME") 
-logging.basicConfig(filename=os.path.join(home, 'wificonnectionmonitor.log'),level=logging.DEBUG, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+home = "/home/pi"
+# os.gentenv("HOME") is returning /root instead of /home/pi for some reason on the pi
+#print(os.getenv("HOME"))
+log_filename = os.path.join(home, 'wificonnectionmonitor.log')
+print(log_filename)
+logging.basicConfig(filename=log_filename,level=logging.DEBUG, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %H:%M:%S %Z%z')
+logging.info("Starting up pi")
 logging.info("auto config delay: " + config_hash['auto_config_delay'])
 
 # If auto_config is set to 0 in /etc/raspiwifi/raspiwifi.conf exit this script
