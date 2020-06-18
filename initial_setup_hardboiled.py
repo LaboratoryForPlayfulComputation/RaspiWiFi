@@ -13,6 +13,8 @@ Creates the following directories/files via setup_lib.py:
 - creates a cron job for raspiwifi
 - creates /etc/raspiwifi/host_mode
 
+WARNING: DOES NOT CURRENTLY WORK IF YOU RE-RUN THIS FILE
+
 '''
 
 

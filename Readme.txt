@@ -1,3 +1,91 @@
+Installation and usage (for updated fork):
+
+1. If you have a pi w/ an OS installed already and either an ethernet connection or pre-configured wifi:
+
+Either install git and clone this repo on your pi:
+$ sudo apt-get install git
+$ git clone https://github.com/LaboratoryForPlayfulComputation/RaspiWiFi.git
+
+or perform a file transfer from your computer with the repo:
+(WARNING: UNTESTED, you may want to transfer a zip file instead as there is an ssh file that scp doesn't understand well)
+$ scp /path/to/RaspiWiFi/on/your/computer pi@192.168.0.xxx:~/RaspiWiFi
+
+Next, install any libraries that you may be missing for RaspiWiFi and make sure that rfkill is unblocked on your pi:
+$ cd RaspiWiFi
+$ sudo ./requirements.sh
+
+Then, run the initial setup (feel free to edit the settings in this file if you want a different setup, such as a longer time period before reboot w/o wifi connection):
+!WARNING: THIS ONLY WORKS ON INITIAL SETUP, NOT SUBSEQUENT SETUP!
+# sudo python3 initial_setup_hardboiled.py
+
+Your pi will now reboot itself and will be broadcasting a hotspot at the following locations (this reboot process took me ~1 minute):
+- [10.0.0.1], [raspiwifisetup.com], or
+[idliketoconfigurethewifionthisdevicenowplease.com]
+
+Join the hotspot that is being broadcast on a computer, phone, tablet, etc (called "RaspiWiFi Setup xxx"), then navigate to one of these websites. Enter the credentials of the network that you'd like to join, then press "connect".
+
+Your pi will reboot itself and join this network. It will no longer be broadcasting a hotspot. This reboot process took me ~30 seconds.
+
+The default settings in this fork are for your pi to reboot itself in hotspot mode if you lose connection for 1 and a half minutes. We can increase this time once we've finished debugging our use cases.
+
+
+DEBUGGING:
+1. If you want to check if your pi is in hotspot mode ("host mode") or not from the command line, run `ifconfig wlan0`.
+
+In hotspot mode, you'll see something like:
+wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.0.1  netmask 255.255.255.0  broadcast 10.0.0.255
+        inet6 fe80::ba27:ebff:fe68:5616  prefixlen 64  scopeid 0x20<link>
+        ether b8:27:eb:68:56:16  txqueuelen 1000  (Ethernet)
+        RX packets 784  bytes 53876 (52.6 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 81  bytes 17807 (17.3 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+In connected to wifi mode (and wifi is working), you'll see something like:
+wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.106  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::da04:ec21:712b:e063  prefixlen 64  scopeid 0x20<link>
+        ether b8:27:eb:68:56:16  txqueuelen 1000  (Ethernet)
+        RX packets 14  bytes 2628 (2.5 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 24  bytes 4237 (4.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+Note the differences in inet!
+
+2. To see if the connection monitor is running in the background:
+pi@raspberrypi:~ $ ps aux | grep "python"
+root       422  0.2  0.8  14860  7696 ?        S    18:53   0:00 python3 /usr/lib/raspiwifi/reset_device/reset.py
+root       423  0.3  0.8  15028  7996 ?        S    18:53   0:00 python3 /usr/lib/raspiwifi/reset_device/connection_monitor.py
+pi         687  0.0  0.0   7348   508 pts/0    S+   18:54   0:00 grep --color=auto python
+
+3. To see the logs from the connection monitor logs, which are be default written to your home directory (`/home/pi/wificonnectionmonitor.log`):
+
+pi@raspberrypi:~ $
+
+This is what it will look like if the pi has a connection and nothing is wonky (1 line logged every 5 minutes):
+
+
+This is what it will look like if the pi lost connection and re-gained it:
+INFO:root:auto config delay: 90
+WARNING:root:wifi is not active!
+WARNING:root:consecutive active reports: 0
+WARNING:root:no connection counter: 10
+WARNING:root:wifi is not active!
+WARNING:root:consecutive active reports: 0
+WARNING:root:no connection counter: 20
+WARNING:root:wifi is not active!
+WARNING:root:consecutive active reports: 0
+WARNING:root:no connection counter: 30
+WARNING:root:wifi is active again, resetting connection counters!
+
+IMPORTANT! If you CHANGE networks, (e.g. move your pi from your home to a different home), you will need to wait the connection monitor time (one and a half minutes here) for the pi to reboot in hotspot mode.
+
+
+below is the Readme from jasbur's original RaspiWiFi library
+
 RaspiWiFi
 
 RaspiWiFi is a program to headlessly configure a Raspberry Pi's WiFi
