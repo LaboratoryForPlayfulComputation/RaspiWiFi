@@ -25,7 +25,7 @@ if os.getuid():
 entered_ssid = ""
 wpa_enabled_choice = "N"
 wpa_entered_key = ""
-auto_config_choice = "N" # appears not to work when set to 'y'
+auto_config_choice = "y"
 auto_config_delay = "90"
 server_port_choice = "80"
 ssl_enabled_choice = "N"
