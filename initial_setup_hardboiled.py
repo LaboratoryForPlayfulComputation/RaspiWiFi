@@ -20,7 +20,6 @@ if os.getuid():
     sys.exit('You need root access to install!')
 
 
-
 entered_ssid = ""
 wpa_enabled_choice = "N"
 wpa_entered_key = ""
@@ -31,7 +30,6 @@ ssl_enabled_choice = "N"
 install_ans = "y"
 
 if(install_ans.lower() == 'y'):
-  reset_lib.reset_to_host_mode()
 	setup_lib.copy_configs(wpa_enabled_choice)
 	setup_lib.update_main_config_file(entered_ssid, auto_config_choice, auto_config_delay, ssl_enabled_choice, server_port_choice, wpa_enabled_choice, wpa_entered_key)
 else:
