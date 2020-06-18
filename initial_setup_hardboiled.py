@@ -1,7 +1,6 @@
 import os
 import sys
 import setup_lib
-import reset_lib
 
 '''
 Creates the following directories/files via setup_lib.py:
@@ -32,7 +31,7 @@ ssl_enabled_choice = "N"
 install_ans = "y"
 
 if(install_ans.lower() == 'y'):
-    reset_lib.reset_to_host_mode()
+  reset_lib.reset_to_host_mode()
 	setup_lib.copy_configs(wpa_enabled_choice)
 	setup_lib.update_main_config_file(entered_ssid, auto_config_choice, auto_config_delay, ssl_enabled_choice, server_port_choice, wpa_enabled_choice, wpa_entered_key)
 else:
