@@ -37,4 +37,4 @@ if(install_ans.lower() == 'y'):
 else:
 	sys.exit()
 
-os.system('shutdown')
+os.system('reboot')
