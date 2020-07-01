@@ -26,7 +26,7 @@ entered_ssid = ""
 wpa_enabled_choice = "N"
 wpa_entered_key = ""
 auto_config_choice = "y"
-auto_config_delay = "300"
+auto_config_delay = "180"
 server_port_choice = "80"
 ssl_enabled_choice = "N"
 install_ans = "y"
@@ -37,4 +37,4 @@ if(install_ans.lower() == 'y'):
 else:
 	sys.exit()
 
-os.system('reboot')
+os.system('shutdown')
